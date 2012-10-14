@@ -4,23 +4,28 @@ use Perlsec::Helper ':all';
 use Switch; #part of core perl
 
 ## INFO
-# author: Kim Jørgensen (github.com/perlsec | perlsec.dk)
+# Author: Kim Jørgensen (github.com/perlsec | perlsec.dk)
+# Version 0.3
 ## DEPENDENCIES ##
 # Perlsec::Helper - helper lib from http://github.com/perlsec/perl-helper
-# screen package - runs the java server in this
-# java (oracle version)
+# screen package - runs the java server in screen to keep ability to send commands to the server
+# java (oracle version 1.6 or 1.7)
 # minecraft jar
 # root+CLI on server
-# optional -
+## OPTIONAL ##
 # c10t - for map generation extra features- http://toolchain.eu/project/c10t 
-## ##
+##
+
+# Basic config
 my $memory_limit = "6G"; #memory limits for java
 my $data_dir = "/opt"; #where minecraft world files are located
 my $minecraft_start_cmd = "/usr/bin/java -Xms$memory_limit -Xmx$memory_limit -jar $data_dir/minecraft_server.jar nogui"; #command to run the server
 my $servlog = "$data_dir/server.log";
-my $backup_dir = "$data_dir/backup";
-my $c10t_path = " /usr/local/src/c10t-unstable/build/c10t";
-my $map_output_dir = "/var/www";
+#Backup config
+my $backup_dir = "$data_dir/backup"; #where to store the packaged backups (.tgz files)
+#Map config
+my $c10t_path = " /usr/local/src/c10t-unstable/build/c10t"; #c10t executeable path
+my $map_output_dir = "/var/www"; #where to put the completed maps
 my $map_archive_dir = "/var/www/map-archive"; #set this to /dev/null to not archive maps (maps are versioned with the same number as the backups)
 
 if (!@ARGV){
@@ -83,7 +88,7 @@ sub mcstart(){
 	}
 	else{
 		say "Starting Minecraft";
-		system("screen -d -m");
+		system("cd $data_dir && screen -d -m");
 		&_mc_exec($minecraft_start_cmd);
 	}
 }
