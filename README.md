@@ -30,6 +30,7 @@ minecraft jar
 root & terminal on server
 ### Optional
 c10t - for map generation extra features- http://toolchain.eu/project/c10t 
+File::Tail perl package (debian package libfile-tail-perl) - For get-list.pl (userlist output script)
 
 # Use
 You can control the server via the init script or simply by attaching to the running screen for direct shell access.
@@ -38,12 +39,13 @@ You can control the server via the init script or simply by attaching to the run
 There are some extra features in the script, for easy use, especially with a job in cron.
 
 ###Output list of online users
-When the runner script is given the list command it will output a list of the users currently online.
+When the runner script is given the list command it will output a list of the users currently online to the log.
+There is a helped script that will execute this, grab the output in the log, and then push it into a file for further use or posting on a website.
 This means a simple command like this in cron will give you a up-to-date list of users on the server.
 ```bash
-/opt/mc-runner/minecraft-runner.pl list > /var/www/users-online.txt
+/opt/mc-runner/get-list.pl
 ```
-(Dont use this too rapidly, only one process at a time can talk to the server. Every 3-5 minut is good)
+(Dont use this too rapidly, only one process at a time can talk to the server. Every 3-5 minut is recommended)
 
 ###Backup world to external file
 The runner script also has a backup function for easily setting up backups of the world
