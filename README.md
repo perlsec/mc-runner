@@ -52,6 +52,7 @@ The runner script also has a backup function for easily setting up backups of th
 
 You use it by setting the right paths in the minecraft-runner.pl script and then sending the backup command to that script.
 Again a good function to have in cron. It seems quite light-weight on the server, so can be run quite aggressively, like every hour or every fourth hour.
+There are config options for how many backups to keep, default is 200. which is just over a months worth at 4 hour interval.
 ```bash
 /opt/mc-runner/minecraft-runner.pl  backup
 ```
