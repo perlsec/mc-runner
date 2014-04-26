@@ -19,8 +19,8 @@ use Switch; #part of core perl
 # Basic config
 my $memory_limit = "6G"; #memory limits for java
 my $data_dir = "/opt"; #where minecraft world files are located
-my $minecraft_start_cmd = "/usr/bin/java -Xms$memory_limit -Xmx$memory_limit -jar $data_dir/minecraft_server.jar nogui"; #command to run the server
-my $servlog = "$data_dir/server.log";
+my $minecraft_start_cmd = "java -Xms$memory_limit -Xmx$memory_limit -jar $data_dir/minecraft_server.jar nogui"; #command to run the server
+my $servlog = "$data_dir/logs/latest.log";
 #Backup config
 my $backup_dir = "$data_dir/backup"; #where to store the packaged backups (.tgz files)
 my $backup_limit = 200; # how many backups to store - a little over a months worth at 4 hour interval
@@ -59,7 +59,7 @@ sub mcbackup(){
 	say "current backup nr: $current_backup";
 	$current_backup++;
 	system("tar -cf $backup_dir/world-$current_backup.tgz $data_dir/world");
-	system("du -hsc $backup_dir/*");
+	system("ls -lhot $backup_dir/*");
 	set_flag("current_mc_backup", $current_backup);
 	&_mc_exec("save-on");
 	&_cleanup_backups();
@@ -67,10 +67,11 @@ sub mcbackup(){
 }
 
 sub mcgenmap(){
+	system('echo "i started" && date');
 	my $backup_version = get_flag("current_mc_backup");
 	my $previous_version = $backup_version - 1;
-	my $genmap_cmd = "$c10t_path -m 2 -M 6000 -s -z -w $data_dir/world -o $map_output_dir/map-new.png";
- 	my $genmap_cmd2 = "$c10t_path -m 2 -M 6000 -s -w $data_dir/world -o $map_output_dir/map-o-new.png";
+	my $genmap_cmd = "$c10t_path -R 150 -m 2 -M 6000 -s -z -w $data_dir/world -o $map_output_dir/map-new.png";
+ 	my $genmap_cmd2 = "$c10t_path -R 150 -m 2 -M 6000 -s -w $data_dir/world -o $map_output_dir/map-o-new.png";
 	#move old map into archive with version name (current -1)
 	my $cp_old_cmd = "cp $map_output_dir/map.png $map_archive_dir/map-$previous_version.png";
 	my $cp_old_cmd2 = "cp $map_output_dir/map-o.png $map_archive_dir/map-o-$previous_version.png";
@@ -84,6 +85,7 @@ sub mcgenmap(){
 	system($rollout_new_map);
 	system($rollout_new_map2);
 	&_say("Generated new map for backup nr: $backup_version");
+	system('echo "i stopped" && date');
 }
 
 sub mcstart(){
