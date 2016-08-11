@@ -3,9 +3,9 @@ use strict;
 use Perlsec::Helper ':all';
 use File::Tail; #debian package libfile-tail-perl
 
-my $servlog = "/opt/logs/latest.log";
+my $servlog = "/opt/mc/logs/latest.log";
 my $output_file = "/var/www/players-online.txt";
-my $list_cmd = "/opt/minecraft-runner.pl list";
+my $list_cmd = "/opt/mc-runner/minecraft-runner.pl list";
 
 #tail logfile, with two past lines, to ensure we dont miss the output in the server log
 my $file = File::Tail->new(name=>$servlog, tail=>2);

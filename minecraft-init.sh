@@ -19,8 +19,8 @@
 
 # PATH should only include /usr/* if it runs after the mountnfs.sh script
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
-DESC="Description of the service"
-NAME="/opt/minecraft-runner.pl"
+DESC="minecraft server"
+NAME="/opt/mc-runner/minecraft-runner.pl"
 
 
 # Load the VERBOSE setting and other rcS variables

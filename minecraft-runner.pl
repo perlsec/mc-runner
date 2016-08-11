@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -w
 use strict;
 use Perlsec::Helper ':all'; 
 use Switch; #part of core perl
@@ -17,13 +17,13 @@ use Switch; #part of core perl
 ##
 
 # Basic config
-my $memory_limit = "6G"; #memory limits for java
-my $data_dir = "/opt"; #where minecraft world files are located
-my $minecraft_start_cmd = "java -Xms$memory_limit -Xmx$memory_limit -jar $data_dir/minecraft_server.jar nogui"; #command to run the server
+my $memory_limit = "26G"; #memory limits for java
+my $data_dir = "/opt/mc/"; #where minecraft world files are located
+my $minecraft_start_cmd = "/opt/java/bin/java -server -Xms$memory_limit -Xmx$memory_limit -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -jar FTBServer-1.7.10-1448.jar nogui";
 my $servlog = "$data_dir/logs/latest.log";
 #Backup config
 my $backup_dir = "$data_dir/backup"; #where to store the packaged backups (.tgz files)
-my $backup_limit = 200; # how many backups to store - a little over a months worth at 4 hour interval
+my $backup_limit = 100; # how many backups to store - a little over a months worth at 4 hour interval
 #Map config
 my $c10t_path = " /usr/local/src/c10t-unstable/build/c10t"; #c10t executeable path
 my $map_output_dir = "/var/www"; #where to put the completed maps
@@ -45,6 +45,7 @@ switch ($command) {
 	case "genmap" {&mcgenmap}
 	case "status" {&mcstatus()}
 	case "list" {&mclist()}
+	case "post" {&_say($ARGV[1])}
 	else { say "command not understood" }
 }
 
@@ -94,7 +95,7 @@ sub mcstart(){
 	}
 	else{
 		say "Starting Minecraft";
-		system("cd $data_dir && screen -d -m");
+		system("cd $data_dir && screen -d -m -S mc");
 		&_mc_exec($minecraft_start_cmd);
 	}
 }
@@ -127,7 +128,7 @@ sub mclist(){
 sub _check_mc_is_running(){
 	my @processes = `ps -A x`;
 	foreach my $processline (@processes){
-		if($processline =~ m/java.*minecraft/){
+		if($processline =~ m/java.*FTBServer/){
 			return 1;
 		}
 	}
